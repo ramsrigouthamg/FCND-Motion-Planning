@@ -27,56 +27,67 @@ You're reading it! Below I describe how I addressed each rubric point and where 
 ### Explain the Starter Code
 
 #### 1. Explain the functionality of what's provided in `motion_planning.py` and `planning_utils.py`
-These scripts contain a basic planning implementation that includes...
-
-And here's a lovely image of my results (ok this image has nothing to do with it, but it's a nice example of how to include images in your writeup!)
-![Top Down View](./misc/high_up.png)
-
-Here's | A | Snappy | Table
---- | --- | --- | ---
-1 | `highlight` | **bold** | 7.41
-2 | a | b | c
-3 | *italic* | text | 403
-4 | 2 | 3 | abcd
+`Answer:`
+These script motion_panning.py that was provided initially was a basic planner extending 
+backyard_flyer_solution.py.
+The main difference is that backyard_flyer_solution.py uses hardcoded fixed waypoints,
+where as motion_panning.py uses waypoints that are generated realtime from the map after 
+using create_grid, a_start functions from planning_utils.py.
+The basic implementation starts from the center of the map. The goal location is 10 mtrs 
+to the north and 10 mtrs to the east. So the goal is to reach from the bottom left of a 10x10 square 
+to the top right of the square. Since no diagonal movements are allowed because of our a_star
+basic implementation, the drone reaches the top right in a zig zag manner on the grid.
+ 
 
 ### Implementing Your Path Planning Algorithm
 
 #### 1. Set your global home position
-Here students should read the first line of the csv file, extract lat0 and lon0 as floating point values and use the self.set_home_position() method to set global home. Explain briefly how you accomplished this in your code.
-
-
-And here is a lovely picture of our downtown San Francisco environment from above!
-![Map of SF](./misc/map.png)
+`Answer:`
+`code lines : 122-130 in motion_planning.py`
+I read the first line from the csv file using python csv reader and separated
+latitude and longitude. Then I used set_home_position function to initialize home
+position.
 
 #### 2. Set your current local position
-Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
-
-
-Meanwhile, here's a picture of me flying through the trees!
-![Forest Flying](./misc/in_the_trees.png)
-
+`Answer:`
+`code lines : 131-134 in motion_planning.py`
+I extracted current global position using self._longitude, self._latitude and self._altitude.
+Then used global_to_local function to get current local position in NED frame.
 #### 3. Set grid start position from local position
-This is another step in adding flexibility to the start location. As long as it works you're good to go!
-
+`Answer:`
+`code lines : 146-147 in motion_planning.py`
+Grid start position is set to current local position of the drone.
 #### 4. Set grid goal position from geodetic coords
-This step is to add flexibility to the desired goal location. Should be able to choose any (lat, lon) within the map and have it rendered to a goal location on the grid.
+`Answer:`
+`code lines : 156-159 in motion_planning.py`
+Any latitude and longitude is taken as a goal position and it is converted to 
+local NED coordinate frame using global_to_local function. Then grid goal position is set.
+
 
 #### 5. Modify A* to include diagonal motion (or replace A* altogether)
-Minimal requirement here is to modify the code in planning_utils() to update the A* implementation to include diagonal motions on the grid that have a cost of sqrt(2), but more creative solutions are welcome. Explain the code you used to accomplish this step.
+`Answer:`
+`code lines : 90-93 and 123-130 in planning_utils.py`
+In the actions class I added(90-93 lines) diagonal motions (NE, NW,SE,SW) with a cost of sqrt(2).
+Then I added(123-130 lines) corresponding checks in valid_actions to remove any
+invalid diagonal actions.
+
 
 #### 6. Cull waypoints 
-For this step you can use a collinearity test or ray tracing method like Bresenham. The idea is simply to prune your path of unnecessary waypoints. Explain the code you used to accomplish this step.
+`Answer:`
+`code lines : 6-35 in planning_utils.py`
+I added functions to prune line segments using the collinearity condition.
+The code is taken from previous exercises shown in the tutorials.
 
-
+The basic algorithm is that if three points are collinear their determinant is zero
+or some low value. We use this logic to eliminate the middle point in every set of three
+points that are collinear.
 
 ### Execute the flight
 #### 1. Does it work?
 It works!
+[Here is the youtube video link](https://youtu.be/5bH68pU24P4)
 
 ### Double check that you've met specifications for each of the [rubric](https://review.udacity.com/#!/rubrics/1534/view) points.
-  
-# Extra Challenges: Real World Planning
-
-For an extra challenge, consider implementing some of the techniques described in the "Real World Planning" lesson. You could try implementing a vehicle model to take dynamic constraints into account, or implement a replanning method to invoke if you get off course or encounter unexpected obstacles.
+  Yes, all the specifications have been met.
 
 
