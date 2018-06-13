@@ -183,7 +183,8 @@ class MotionPlanning(Drone):
         # TODO: adapt to set goal as latitude / longitude position and convert
         # Distant point  (-122.401386, 37.707102,0)
         # Close point  (-122.396306, 37.794256,0)
-        grid_goal_lon_lat = (-122.396306, 37.794256,0)
+        # working point (-122.396046, 37.794463,0)
+        grid_goal_lon_lat = (-122.396046, 37.794463,0)
         goal_local_position = global_to_local(grid_goal_lon_lat, self.global_home)
         print ("current_local_position ",current_local_position,"  goal_local_position ",goal_local_position)
         grid_goal = (int(-north_offset + goal_local_position[0]), int(-east_offset + goal_local_position[1]))
@@ -191,6 +192,9 @@ class MotionPlanning(Drone):
         # Run A* to find a path from start to goal
         # TODO: add diagonal motions with a cost of sqrt(2) to your A* implementation
         # or move to a different search space such as a graph (not done here)
+        # equivalent point: grid_goal_lon_lat = (-122.396046, 37.794463,0)
+        # grid_start=(316,445)
+        # grid_goal = (536, 570)
         print('Local Start and Goal: ', grid_start, grid_goal)
         path, _ = a_star(grid, heuristic, grid_start, grid_goal)
         # TODO: prune path to minimize number of waypoints
