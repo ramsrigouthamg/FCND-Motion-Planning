@@ -177,13 +177,14 @@ class MotionPlanning(Drone):
         # Define starting point on the grid (this is just grid center)
 
         # TODO: convert start position to current position rather than map center
-        grid_start = (-north_offset + current_local_position[0], -east_offset + +current_local_position[1])
+        grid_start = (int(-north_offset + current_local_position[0]), int(-east_offset + +current_local_position[1]))
 
         # Set goal as some arbitrary position on the grid
         # TODO: adapt to set goal as latitude / longitude position and convert
-        grid_goal_lon_lat = (-122.401386, 37.707102)
+        grid_goal_lon_lat = (-122.401386, 37.707102,0)
         goal_local_position = global_to_local(grid_goal_lon_lat, self.global_home)
-        grid_goal = (-north_offset + goal_local_position[0], -east_offset + goal_local_position[1])
+        print ("current_local_position ",current_local_position,"  goal_local_position ",goal_local_position)
+        grid_goal = (int(-north_offset + goal_local_position[0]), int(-east_offset + goal_local_position[1]))
 
         # Run A* to find a path from start to goal
         # TODO: add diagonal motions with a cost of sqrt(2) to your A* implementation
